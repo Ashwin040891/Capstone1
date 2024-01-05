@@ -41,7 +41,7 @@ def get_channel_data(youtube, channel_id):
     )
     response = request.execute()
     
-    if len(response['items']) == 0:
+    if "items" not in response or len(response["items"]) == 0:
         st.error("Invalid channel ID. Please enter a valid channel ID.")
         return None
 
@@ -155,6 +155,8 @@ def get_channel_data(youtube, channel_id):
     else:
         channel_data["Channel_Id"] = channel_id
         db.coll.insert_one(channel_data)
+        
+    st.write(f"Channel details successfully fetched for Channel ID: {channel_id}")
 
 def convert_dur(duration):
     
@@ -248,7 +250,6 @@ def main():
         if st.button(":green[Get Channel Data]"):
              with st.spinner('Please wait...'):
                  get_channel_data(youtube, channel_id)
-             st.write(f"Channel details successfully fetched for Channel ID: {channel_id}")
 
     with col2:
         
